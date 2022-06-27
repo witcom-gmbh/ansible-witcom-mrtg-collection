@@ -106,28 +106,6 @@ Dependencies
 
 * containers.podman
 
-Installation
-----------------
-
-Collections & Rollen in das Playbook-Verzeichnis installieren, d.h in ansible.cfg wird folgende Konfiguration benötigt
-
-```
-[defaults]
-
-....
-
-# Installs collections into [current dir]/ansible_collections/namespace/collection_name
-collections_paths = ./
-# Installs roles into [current dir]/roles/namespace.rolename
-roles_path = ./roles
-
-....
-
-```
-
-`ansible-galaxy collection install COLLECTION.TAR.GZ --force`
-
-
 Example Playbook
 ----------------
 
