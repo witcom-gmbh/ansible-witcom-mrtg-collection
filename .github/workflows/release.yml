@@ -13,7 +13,10 @@ jobs:
     name: build_release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-python@v4
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'      
       - name: Install ansible
         uses: BSFishy/pip-action@v1
         with:
