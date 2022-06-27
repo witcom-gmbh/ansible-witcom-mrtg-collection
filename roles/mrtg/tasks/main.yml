@@ -1,0 +1,26 @@
+---
+
+- name: Create directories
+  include_tasks:
+    file: "createdirs.yml"
+    apply:
+      tags: create_dirs
+  tags: create_dirs
+
+- name: Import mrtg_podman
+  include_tasks: "mrtg_podman.yml"
+
+- name: Import mrtg_cron
+  include_tasks:
+    file: "mrtg_cron.yml"
+    apply:
+      tags: cron
+  tags: cron
+
+- name: Import mrtg_cfgmaker
+  include_tasks:
+    file: "mrtg_cfgmaker.yml"
+    apply:
+      tags: cfgmaker
+  tags: cfgmaker
+

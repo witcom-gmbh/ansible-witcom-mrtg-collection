@@ -1,0 +1,3 @@
+podman run --rm --cap-add ALL --name {{ _name }} --network=host -u root 
+{%- for key, value in _env_vars.items() %} -e {{ key }}={{ value }}{% endfor -%}
+{% for volume in _volumes %} -v {{ volume }}{% endfor %} {{ _image }} > /dev/null 2>&1

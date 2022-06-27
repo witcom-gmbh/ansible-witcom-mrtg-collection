@@ -1,0 +1,133 @@
+---
+- name: Register MRTG-Cronjobs
+  vars:
+    pod_name: "{{ mrtg_pod_name }}.{{ inventory_hostname_short }}.mrtg_{{ mrtg.instance_name }}"
+  block:
+
+    - name: register cronjob for config-generator
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_cfg_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_create_cfg_image }}:{{ _mrtg_create_cfg_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+        _volumes:
+          - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"    
+          - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:z"
+      debug:
+        msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+
+    - name: register cronjob for config-generator
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_cfg_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_create_cfg_image }}:{{ _mrtg_create_cfg_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          SCHEDULED: "0"
+        _volumes:
+          - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"
+          - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:z"
+      ansible.builtin.cron:
+        name: "mrtg-config-generator"
+        minute: "*/{{ _mrtg_create_cfg_interval }}"
+        job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+        state: "{{ 'present' if mrtg.config_generator.enabled | default('true') | bool else 'absent' }}"
+
+
+    - name: register cronjob for mrtg-worker
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_worker_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_worker_image }}:{{ _mrtg_worker_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          RADIUS_DB_USER: "{{ mrtg.radius.db.user }}"
+          RADIUS_DB_PASS: "{{ mrtg.radius.db.password }}"
+          RADIUS_DB_HOST: "{{ mrtg.radius.db.host }}"
+          SCHEDULED: "0"
+        _volumes:
+          - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"
+          - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:ro,z"
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:z"
+      debug:
+        msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+
+
+
+    - name: register cronjob for mrtg-worker
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_worker_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_worker_image }}:{{ _mrtg_worker_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          RADIUS_DB_USER: "{{ mrtg.radius.db.user }}" 
+          RADIUS_DB_PASS: "{{ mrtg.radius.db.password }}"         
+          RADIUS_DB_HOST: "{{ mrtg.radius.db.host }}"
+          SCHEDULED: "0"
+        _volumes:
+          - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"
+          - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:ro,z"
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:z"
+      ansible.builtin.cron:
+        name: "mrtg-worker"
+        minute: "*/{{ _mrtg_worker_interval }}"
+        #job: "podman run --rm --cap-add ALL --name {{ inventory_hostname_short }}.mrtg_worker_{{ mrtg.instance_name }} --network=host -u root -v {{ mrtg_config }}/config:/usr/local/mrtg2/conf:z -v {{ mrtg_config }}/work:/usr/local/mrtg2/work:ro,z -v {{ mrtg_data }}/logs:/usr/local/mrtg2/logs:z -e DB_USER={{ mrtg.db.user }} -e DB_PASS={{ mrtg.db.password }} -e DB_NAME={{ mrtg.db.name }} -e DB_HOST={{ mrtg.db.host }} -e SCHEDULED=0  -e RADIUS_DB_USER={{ mrtg.radius.db.user }} -e RADIUS_DB_PASS={{ mrtg.radius.db.password }} -e RADIUS_DB_HOST={{ mrtg.radius.db.host }} {{ mrtg_worker_image }}:{{ _mrtg_worker_version }}"
+        job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+        state: "{{ 'present' if mrtg.worker.enabled | default('true') | bool else 'absent' }}"
+
+
+    - name: register cronjob for traffic-sum
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_sum_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_traffic_sum_image }}:{{ _mrtg_traffic_sum_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_traffic_sum_dry_run }}"
+        _volumes:
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z"
+      debug:
+        msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+
+
+
+    - name: register cronjob for traffic-sum
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_sum_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_traffic_sum_image }}:{{ _mrtg_traffic_sum_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_traffic_sum_dry_run }}"
+        _volumes:
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z"
+      ansible.builtin.cron:
+        name: "mrtg-traffic-sum"
+        minute: "*/{{ _mrtg_traffic_sum_interval }}"
+        #job: "podman run --rm --cap-add ALL --name {{ inventory_hostname_short }}.mrtg_sum_{{ mrtg.instance_name }} --network=host -u root -v {{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z -e DRY_RUN={{ _mrtg_traffic_sum_dry_run }} -e DB_USER={{ mrtg.db.user }} -e DB_PASS={{ mrtg.db.password }} -e DB_NAME={{ mrtg.db.name }} -e DB_HOST={{ mrtg.db.host }} -e SCHEDULED=0 {{ mrtg_traffic_sum_image }}:{{ _mrtg_traffic_sum_version }}"
+        job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+        state: "{{ 'present' if mrtg.traffic_sum.enabled | default('true') | bool else 'absent' }}"
+
+

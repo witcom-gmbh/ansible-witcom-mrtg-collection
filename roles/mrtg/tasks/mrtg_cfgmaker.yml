@@ -1,0 +1,8 @@
+- name: Create cfgmaker Script
+  tags: cfgmaker
+  ansible.builtin.template:
+    src: cfgmakerdb.j2
+    dest: /usr/bin/cfgmakerdb
+    owner: root
+    group: root
+    mode: '0755'

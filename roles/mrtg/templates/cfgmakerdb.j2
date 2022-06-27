@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+    echo "Device angeben !! Format community@IP-Adresse"
+    exit 1;
+fi
+
+podman run --rm -e DB_USER={{ mrtg.db.user }} -e DB_PASS={{ mrtg.db.password }} -e DB_NAME={{ mrtg.db.name }} -e DB_HOST={{ mrtg.db.host }} {{ mrtg_cfgmaker_image }}:{{ _mrtg_cfgmaker_version }} $1 $2 $3

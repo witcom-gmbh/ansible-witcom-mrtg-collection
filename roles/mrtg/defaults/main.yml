@@ -1,0 +1,91 @@
+---
+
+###############################
+#Container - Versions and Repos
+mrtg_repo: "my-docker-repo/mrtg"
+#Default Version for all NON-WEB components
+_mrtg_version: "{{ mrtg_version | default('0.2.11') }}" 
+
+
+#Config-Generator
+mrtg_create_cfg_image: "{{ mrtg_repo }}/mrtg-create-cfg"
+_mrtg_create_cfg_version: "{{ mrtg_create_cfg_version | default(_mrtg_version)}}"
+
+
+#Worker
+mrtg_worker_image: "{{ mrtg_repo }}/mrtg-run"
+_mrtg_worker_version: "{{ mrtg_worker_version | default(_mrtg_version)}}" 
+
+#Traffic-Sum
+mrtg_traffic_sum_image: "{{ mrtg_repo }}/mrtg-traffic-sum"
+_mrtg_traffic_sum_version: "{{ mrtg_traffic_sum_version | default(_mrtg_version)}}"
+
+#Cfg-Maker
+mrtg_cfgmaker_image: "{{ mrtg_repo }}/mrtg-cfgmaker"
+_mrtg_cfgmaker_version: "{{ mrtg_cfg_maker_version | default(_mrtg_version)}}"
+
+#Web-Frontend
+_mrtg_web_version: "{{ mrtg_web_version | default('0.1.0')}}"
+mrtg_web_image: "{{ mrtg_repo }}/mrtg-web"
+
+##########################
+#Configuration
+
+# persistent directories
+container_conf_dir: "/var/srv/containers/config"
+container_data_dir: "/var/srv/containers/volume"
+
+mrtg_config: "{{ container_conf_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
+mrtg_data: "{{ container_data_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
+
+mrtg:
+  instance_name: "internal01"
+  db:
+    user: dbuser
+    password: password
+    name: mrtg
+    host: localhost
+  radius:
+    db:
+      user: radiusdbuser
+      password: radiusdbpassword
+      host: localhost
+  web:
+    network: "external-net"
+    enabled: true
+    memory_limit: 1g
+    cpu_limit: 1
+    keycloak:
+      url: http://localhost:8080/auth
+      realm: realm
+      client: client
+      secret: secret
+  worker:
+    enabled: true
+    interval: 5
+    memory_limit: 2g
+    cpu_limit: 4
+  config_generator:
+    enabled: true
+    memory_limit: 1g
+    interval: 15
+    cpu_limit: 1
+  traffic_sum:
+    enabled: true
+    interval: 15
+    dry_run: 0
+
+
+#internals
+
+
+_mrtg_create_cfg_interval: "{{ mrtg.config_generator.interval | default('15') }}"
+_mrtg_worker_interval: "{{ mrtg.worker.interval | default('5') }}"
+_mrtg_traffic_sum_interval: "{{ mrtg.traffic_sum.interval | default('15') }}"
+_mrtg_traffic_sum_dry_run: "{{ mrtg.traffic_sum.dry_run | default('0') }}"
+
+# Start web-container
+_mrtg_web_state: "started"
+# recreate container definition if it exists
+_mrtg_web_recreate: "no"
+
