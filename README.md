@@ -20,7 +20,7 @@ roles_path = ./roles
 
 Installieren mit (ggf. RELEASE anpassen)
 
-`ansible-galaxy collection install https://github.com/witcom-gmbh/ansible-witcom-mrtg-collection/releases/download/v1.0.0/witcom-witcom_mrtg-1.0.0.tar.gz`
+`ansible-galaxy collection install https://github.com/witcom-gmbh/ansible-witcom-mrtg-collection/releases/download/v1.0.0/witcom-witcom_mrtg-1.0.0.tar.gz --force`
 
 
 ## Anpassungen
