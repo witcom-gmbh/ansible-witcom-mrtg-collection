@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] - 2022-06-27
+
+### Fixed
+
+- Make startup for web-container more robust
+
 ## [1.0.0] - 2022-06-27
 
 Version bump
