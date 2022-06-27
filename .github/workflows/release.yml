@@ -32,19 +32,19 @@ jobs:
         id: version
       - name: build artifacts
         run: make build
-#      - name: push tag with version
-#        id: tag_version
-#        uses: mathieudutour/github-tag-action@v6.0
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          custom_tag: ${{ steps.version.outputs.version }}
-#      - name: create-release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          allowUpdates: false
-#          artifactErrorsFailBuild: true
-#          artifacts: "witcom-witcom_mrtg-${{ steps.version.outputs.version }}.tar.gz"
-#          tag: ${{ steps.tag_version.outputs.new_tag }}
-#          name: Release ${{ steps.tag_version.outputs.new_tag }}
-#          bodyFile: "CHANGELOG.md"
-#          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: push tag with version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.version.outputs.version }}
+      - name: create-release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: false
+          artifactErrorsFailBuild: true
+          artifacts: "witcom-witcom_mrtg-${{ steps.version.outputs.version }}.tar.gz"
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          bodyFile: "CHANGELOG.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
