@@ -5,14 +5,11 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:${VARIANT}
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
-# To make it easier for build and release pipelines to run apt-get,
-# configure apt to not require confirmation (assume the -y argument by default)
 ENV DEBIAN_FRONTEND noninteractive
-RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
-ARG USERNAME=vscode
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+#ARG USERNAME=vscode
+#ARG USER_UID=1000
+#ARG USER_GID=$USER_UID
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
