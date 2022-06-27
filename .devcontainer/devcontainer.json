@@ -45,6 +45,6 @@
 	"containerEnv": {
 		"ANSIBLE_CONFIG": "${containerWorkspaceFolder}/ansible.cfg"
 	},
-	"postCreateCommand": "chmod 0644 ${containerWorkspaceFolder} && ansible-galaxy install -r requirements.yml",
+	"postCreateCommand": "ansible-galaxy install -r requirements.yml",
 	"remoteUser": "vscode"
 }
