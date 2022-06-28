@@ -8,7 +8,11 @@
   tags: create_dirs
 
 - name: Import mrtg_podman
-  include_tasks: "mrtg_podman.yml"
+  include_tasks:
+    file: "mrtg_podman.yml"
+    apply:
+      tags: mrtg_web
+  tags: mrtg_web
 
 - name: Import mrtg_cron
   include_tasks:

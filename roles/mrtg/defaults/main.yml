@@ -9,23 +9,23 @@ _mrtg_version: "{{ mrtg_version | default('0.2.11') }}"
 
 #Config-Generator
 mrtg_create_cfg_image: "{{ mrtg_repo }}/mrtg-create-cfg"
-_mrtg_create_cfg_version: "{{ mrtg_create_cfg_version | default(_mrtg_version)}}"
+_mrtg_create_cfg_version: "{{ mrtg_create_cfg_version | default(_mrtg_version) }}"
 
 
 #Worker
 mrtg_worker_image: "{{ mrtg_repo }}/mrtg-run"
-_mrtg_worker_version: "{{ mrtg_worker_version | default(_mrtg_version)}}" 
+_mrtg_worker_version: "{{ mrtg_worker_version | default(_mrtg_version) }}" 
 
 #Traffic-Sum
 mrtg_traffic_sum_image: "{{ mrtg_repo }}/mrtg-traffic-sum"
-_mrtg_traffic_sum_version: "{{ mrtg_traffic_sum_version | default(_mrtg_version)}}"
+_mrtg_traffic_sum_version: "{{ mrtg_traffic_sum_version | default(_mrtg_version) }}"
 
 #Cfg-Maker
 mrtg_cfgmaker_image: "{{ mrtg_repo }}/mrtg-cfgmaker"
-_mrtg_cfgmaker_version: "{{ mrtg_cfg_maker_version | default(_mrtg_version)}}"
+_mrtg_cfgmaker_version: "{{ mrtg_cfg_maker_version | default(_mrtg_version) }}"
 
 #Web-Frontend
-_mrtg_web_version: "{{ mrtg_web_version | default('0.1.0')}}"
+_mrtg_web_version: "{{ mrtg_web_version | default('0.1.0') }}"
 mrtg_web_image: "{{ mrtg_repo }}/mrtg-web"
 
 ##########################
@@ -35,8 +35,8 @@ mrtg_web_image: "{{ mrtg_repo }}/mrtg-web"
 container_conf_dir: "/var/srv/containers/config"
 container_data_dir: "/var/srv/containers/volume"
 
-mrtg_config: "{{ container_conf_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
-mrtg_data: "{{ container_data_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
+mrtg_config: "{{ container_conf_dir }}/{{ inventory_hostname_short }}.mrtg_{{ mrtg.instance_name }}"
+mrtg_data: "{{ container_data_dir }}/{{ inventory_hostname_short }}.mrtg_{{ mrtg.instance_name }}"
 
 mrtg:
   instance_name: "internal01"

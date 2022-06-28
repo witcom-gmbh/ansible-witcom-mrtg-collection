@@ -76,7 +76,7 @@
       vars:
         container_name: "{{ web_container_name }}"
         type: container
-      import_role:
+      ansible.builtin:import_role:
         name: podman_systemd_simple
   
   when: mrtg.web.enabled | default(true) | bool
