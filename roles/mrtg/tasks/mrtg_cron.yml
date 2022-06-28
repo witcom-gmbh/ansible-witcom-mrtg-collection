@@ -17,7 +17,7 @@
         _volumes:
           - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"    
           - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:z"
-      ansible.builtin:debug:
+      ansible.builtin.debug:
         msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
 
     - name: register cronjob for config-generator
@@ -59,7 +59,7 @@
           - "{{ mrtg_config }}/config:/usr/local/mrtg2/conf:z"
           - "{{ mrtg_config }}/work:/usr/local/mrtg2/work:ro,z"
           - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:z"
-      ansible.builtin:debug:
+      ansible.builtin.debug:
         msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
 
 
@@ -104,7 +104,7 @@
           DRY_RUN: "{{ _mrtg_traffic_sum_dry_run }}"
         _volumes:
           - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z"
-      ansible.builtin:debug:
+      ansible.builtin.debug:
         msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
 
 

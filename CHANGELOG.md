@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.5] - 2022-06-28
+
+### Added
+
+- Version bump mrtg-containers to 0.2.13
+
+### Fixed
+
+- stupid typo-fix 
+
 ## [1.0.4] - 2022-06-28
 
 ### Fixed

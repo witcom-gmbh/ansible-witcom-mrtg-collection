@@ -4,7 +4,7 @@
 #Container - Versions and Repos
 mrtg_repo: "my-docker-repo/mrtg"
 #Default Version for all NON-WEB components
-_mrtg_version: "{{ mrtg_version | default('0.2.11') }}" 
+_mrtg_version: "{{ mrtg_version | default('0.2.13') }}" 
 
 
 #Config-Generator
