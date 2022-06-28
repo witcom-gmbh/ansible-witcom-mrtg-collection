@@ -1,6 +1,6 @@
 namespace: witcom
 name: witcom_mrtg
-version: 1.0.1
+version: 1.0.3
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
