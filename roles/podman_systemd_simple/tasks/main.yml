@@ -7,9 +7,11 @@
     service_unit: "{{ prefix }}-{{ container_name }}.service"
   block:
     - name: Generate systemd units by podman
-      ansible.builtin:command:
+      ansible.builtin.command:
         cmd: podman generate systemd -f -n -t "{{ container_stop_timeout }}" "{{ container_name }}"
         chdir: "{{ service_files_dir }}"
+      register: register_output
+      changed_when: register_output.rc != 0
 
     - name: Check that generated service unit exists
       ansible.builtin.stat:
@@ -26,7 +28,7 @@
       when: stat_result.stat.exists
       
     - name: Ensure service is in a running state
-      ansible.builtin:service:
+      ansible.builtin.service:
           name: "{{ service_unit }}" 
           state: started
       register: myservice_details
