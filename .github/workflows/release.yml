@@ -36,6 +36,7 @@ jobs:
         with:
           default_author: github_actions
           add: ./galaxy.yml
+          message: 'Bumped metadata-version to ${{ steps.version.outputs.version }}'
       - name: build artifacts
         run: make build
       - name: push tag with version
