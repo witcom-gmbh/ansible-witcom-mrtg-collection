@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.7] - 2022-06-30
+
+### Fixed
+
+- fixed wrong version
+
 ## [1.0.6] - 2022-06-30
 
 ### Added

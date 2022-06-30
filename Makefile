@@ -5,8 +5,9 @@ all: clean build
 clean:
 	rm -f witcom-witcom_mrtg-*.tar.gz
 
-update_metadata:
+release_prepare:
 	@sed "s/RELEASE/${RELEASE}/g" ./galaxy.yml.in > ./galaxy.yml
+	#todo: check for release in changelog
 
 build:
 	ansible-lint -x yaml
