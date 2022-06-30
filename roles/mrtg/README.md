@@ -22,7 +22,7 @@ Verfügbare Variablen mit Default-Werten (siehe auch `defaults/main.yml`) werden
 
     mrtg_repo: my-docker-repo/mrtg
     mrtg_version: "0.2.11"
-    mrtg_web_version: "0.1.0"
+    mrtg_web_version: "0.2.0"
     mrtg_worker_image: {{mrtg_repo}}/mrtg-run
     mrtg_worker_version: {{ mrtg_version }} 
     mrtg_cfgmaker_image: {{mrtg_repo}}/mrtg-cfgmaker
@@ -33,7 +33,7 @@ Verfügbare Variablen mit Default-Werten (siehe auch `defaults/main.yml`) werden
     mrtg_traffic_sum_version: {{ mrtg_version }}
     mrtg_web_image: {{mrtg_repo}}/mrtg-web 
 
-Das Standard Image-Repository kann pro Komponente definiert werden, ebenso die Image-Version. Per
+Das Standard Image-Repository kann pro Komponente definiert werden, ebenso die Image-Version.
 
     container_conf_dir: "/var/srv/containers/config"
     container_data_dir: "/var/srv/containers/volume"
@@ -43,10 +43,7 @@ Basis-Verzeichnisse für Konfiguration & Daten
     mrtg_config: "{{ container_conf_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
     mrtg_data: "{{ container_data_dir }}/{{inventory_hostname_short}}.mrtg_{{mrtg.instance_name}}"
 
-Spezifisccher Speicherort für die ausgerollte MRTG-Instanz
-
-    mrtg_version: "0.2.11"
-    mrtg_web_version: "0.1.0"
+Spezifischer Speicherort für die ausgerollte MRTG-Instanz
 
 ```
 mrtg:

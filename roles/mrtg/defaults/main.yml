@@ -25,7 +25,7 @@ mrtg_cfgmaker_image: "{{ mrtg_repo }}/mrtg-cfgmaker"
 _mrtg_cfgmaker_version: "{{ mrtg_cfg_maker_version | default(_mrtg_version) }}"
 
 #Web-Frontend
-_mrtg_web_version: "{{ mrtg_web_version | default('0.1.0') }}"
+_mrtg_web_version: "{{ mrtg_web_version | default('0.2.0') }}"
 mrtg_web_image: "{{ mrtg_repo }}/mrtg-web"
 
 ##########################
