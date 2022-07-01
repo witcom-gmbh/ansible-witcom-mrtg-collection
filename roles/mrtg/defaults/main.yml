@@ -4,13 +4,11 @@
 #Container - Versions and Repos
 mrtg_repo: "my-docker-repo/mrtg"
 #Default Version for all NON-WEB components
-_mrtg_version: "{{ mrtg_version | default('0.2.13') }}" 
-
+_mrtg_version: "{{ mrtg_version | default('0.3.0') }}" 
 
 #Config-Generator
 mrtg_create_cfg_image: "{{ mrtg_repo }}/mrtg-create-cfg"
 _mrtg_create_cfg_version: "{{ mrtg_create_cfg_version | default(_mrtg_version) }}"
-
 
 #Worker
 mrtg_worker_image: "{{ mrtg_repo }}/mrtg-run"
@@ -23,6 +21,14 @@ _mrtg_traffic_sum_version: "{{ mrtg_traffic_sum_version | default(_mrtg_version)
 #Cfg-Maker
 mrtg_cfgmaker_image: "{{ mrtg_repo }}/mrtg-cfgmaker"
 _mrtg_cfgmaker_version: "{{ mrtg_cfg_maker_version | default(_mrtg_version) }}"
+
+#Delete-Data
+mrtg_delete_image: "{{ mrtg_repo }}/mrtg-delete-data"
+_mrtg_delete_version: "{{ mrtg_delete_version | default(_mrtg_version) }}"
+
+# Device-Test
+_mrtg_devicetest_version: "{{ mrtg_devicetest_version | default('0.3.0') }}"
+mrtg_devicetest_image: "{{ mrtg_repo }}/mrtg-device-test"
 
 #Web-Frontend
 _mrtg_web_version: "{{ mrtg_web_version | default('0.2.0') }}"
@@ -74,15 +80,34 @@ mrtg:
     enabled: true
     interval: 15
     dry_run: 0
-
+  delete_data:
+    enabled: true
+    interval: 15
+    dry_run: 0
+    instance: worker
+  device_test:
+    enabled: true
+    # interval in hours
+    # 23 means at 23 PM
+    interval: 23
+    dry_run: 0
+    mail_server:
+    mail_recipient:
 
 #internals
-
 
 _mrtg_create_cfg_interval: "{{ mrtg.config_generator.interval | default('15') }}"
 _mrtg_worker_interval: "{{ mrtg.worker.interval | default('5') }}"
 _mrtg_traffic_sum_interval: "{{ mrtg.traffic_sum.interval | default('15') }}"
 _mrtg_traffic_sum_dry_run: "{{ mrtg.traffic_sum.dry_run | default('0') }}"
+
+_mrtg_devicetest_interval: "{{ mrtg.device_test.interval | default('23') }}"
+_mrtg_devicetest_dry_run: "{{ mrtg.device_test.dry_run | default('0') }}"
+
+_mrtg_delete_data_interval: "{{ mrtg.delete_data.interval | default('15') }}"
+_mrtg_delete_data_dry_run: "{{ mrtg.delete_data.dry_run | default('0') }}"
+_mrtg_delete_data_instance: "{{ mrtg.delete_data.instance | default('worker') }}"
+
 
 # Start web-container
 _mrtg_web_state: "started"

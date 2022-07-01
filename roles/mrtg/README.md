@@ -31,6 +31,10 @@ Verfügbare Variablen mit Default-Werten (siehe auch `defaults/main.yml`) werden
     mrtg_create_cfg_version: {{ mrtg_version }} 
     mrtg_traffic_sum_image: {{mrtg_repo}}/mrtg-traffic-sum
     mrtg_traffic_sum_version: {{ mrtg_version }}
+    mrtg_delete_image: {{ mrtg_repo }}/mrtg-delete-data
+    mrtg_delete_version: {{ mrtg_version }}
+    mrtg_devicetest_image: {{ mrtg_repo }}/mrtg-web
+    mrtg_devicetest_version: {{ mrtg_version }}
     mrtg_web_image: {{mrtg_repo}}/mrtg-web 
 
 Das Standard Image-Repository kann pro Komponente definiert werden, ebenso die Image-Version.
@@ -96,6 +100,26 @@ mrtg:
     interval: 15
     # Im Test-Modus (dry_run = 1) werden die Daten nicht in die DB geschrieben
     dry_run: 0
+  delete_data:
+    # Verarbeitung DELETE-Requests aus MRTG-Backend
+    # Aktivierung
+    enabled: true
+    # Ausführungs-Interval in Minuten
+    interval: 15
+    dry_run: 0
+    # Nicht anpassen
+    instance: worker    
+  device_test:
+    #SNMP-Device check
+    #versendet email mit Devices die nicht per SNMP abfragbar sind
+    enabled: true
+    # Ausführungs-Interval in Stunden = 23 Uhr
+    interval: 23
+    dry_run: 0
+    # Mail-Server zum Versand der eMail
+    mail_server:
+    # eMail empfäner
+    mail_recipient:
 ```
 
 Dependencies

@@ -130,4 +130,79 @@
         job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
         state: "{{ 'present' if mrtg.traffic_sum.enabled | default('true') | bool else 'absent' }}"
 
+    - name: register cronjob for device-test
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_test_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_devicetest_image }}:{{ _mrtg_devicetest_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          MAIL_RECIPIENT: "{{ mrtg.device_test.mail_recipient }}"
+          MAIL_SERVER: "{{ mrtg.device_test.mail_server }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_devicetest_dry_run }}"
+      ansible.builtin.cron:
+        name: "mrtg-device-test"
+        minute: "0"
+        hour: "*/{{ _mrtg_devicetest_interval }}"
+        job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+        state: "{{ 'present' if mrtg.device_test.enabled | default('true') | bool else 'absent' }}"
 
+    - name: debug - register cronjob for device-test
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_test_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_devicetest_image }}:{{ _mrtg_devicetest_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          MAIL_RECIPIENT: "{{ mrtg.device_test.mail_recipient }}"
+          MAIL_SERVER: "{{ mrtg.device_test.mail_server }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_devicetest_dry_run }}"
+      ansible.builtin.debug:
+        msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+
+    - name: register cronjob for delete-requests
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_delete_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_delete_image }}:{{ _mrtg_delete_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_delete_data_dry_run }}"
+          INSTANCE: "{{ _mrtg_delete_data_instance }}"
+        _volumes:
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z"
+      ansible.builtin.cron:
+        name: "mrtg-delete.data"
+        minute: "*/{{ _mrtg_delete_data_interval }}"
+        job: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"
+        state: "{{ 'present' if mrtg.delete_data.enabled | default('true') | bool else 'absent' }}"
+
+    - name: register cronjob for delete-requests
+      tags: cron
+      vars:
+        _name: "{{ inventory_hostname_short }}.mrtg_delete_{{ mrtg.instance_name }}"
+        _image: "{{ mrtg_delete_image }}:{{ _mrtg_delete_version }}"
+        _env_vars:
+          DB_USER: "{{ mrtg.db.user }}"
+          DB_PASS: "{{ mrtg.db.password }}"
+          DB_NAME: "{{ mrtg.db.name }}"
+          DB_HOST: "{{ mrtg.db.host }}"
+          SCHEDULED: "0"
+          DRY_RUN: "{{ _mrtg_delete_data_dry_run }}"
+          INSTANCE: "{{ _mrtg_delete_data_instance }}"
+        _volumes:
+          - "{{ mrtg_data }}/logs:/usr/local/mrtg2/logs:ro,z"
+      ansible.builtin.debug:
+        msg: "{{ lookup('ansible.builtin.template', './cronjob.j2') }}"

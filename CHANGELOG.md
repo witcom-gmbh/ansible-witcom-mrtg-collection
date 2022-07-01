@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0] - 2022-07-01
+
+### Added
+
+- Cronjob for mrtg-device-check
+- Cronjob for mrtg-delete-data
+
+### Fixed
+
+- Handling of missing volumes-variable in cronjob-template
+
 ## [1.0.7] - 2022-06-30
 
 ### Fixed
