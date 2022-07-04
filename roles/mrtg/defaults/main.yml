@@ -114,3 +114,4 @@ _mrtg_web_state: "started"
 # recreate container definition if it exists
 _mrtg_web_recreate: "no"
 
+_mrtg_web_service_unit: "container-{{ inventory_hostname_short }}.mrtg_web_{{ mrtg.instance_name }}"

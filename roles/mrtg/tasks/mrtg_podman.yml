@@ -44,7 +44,6 @@
     - name: Run MRTG-WEB container
       podman_container:
         name: "{{ web_container_name }}"
-#        pod: "{{ pod_name }}"
         image: "{{ mrtg_web_image }}:{{ _mrtg_web_version }}"
         state: "{{ _mrtg_web_state }}"
         recreate: "{{ _mrtg_web_recreate }}"
@@ -52,10 +51,9 @@
         publish: "8080:8080"
         label:
           process=mrtg-web
-        expose:
-          - "8080"  
-        memory: "{{ mrtg.web.memory_limit | default('1g') }}"
-        cpus: "{{ mrtg.web.cpu_limit | default('1') }}"
+        memory: "{{ mrtg.web.memory_limit | default('1g') | human_to_bytes }}"
+        memory_swap: "{{ mrtg.web.memory_limit | default('1g') | human_to_bytes * 2 }}"
+        cpu_period: "{{ mrtg.web.cpu_limit | default('1') * 100000 }}"
         env:
           MRTG_DB_USER: "{{ mrtg.db.user }}"
           MRTG_DB_PASS: "{{ mrtg.db.password }}"
