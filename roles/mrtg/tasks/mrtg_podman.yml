@@ -51,9 +51,13 @@
         publish: "8080:8080"
         label:
           process=mrtg-web
+        generate_systemd:
+          path: /etc/systemd/system
+          separator: "-"
+          container_prefix: "container"
         memory: "{{ mrtg.web.memory_limit | default('1g') | human_to_bytes }}"
         memory_swap: "{{ mrtg.web.memory_limit | default('1g') | human_to_bytes * 2 }}"
-        cpu_period: "{{ mrtg.web.cpu_limit | default('1') * 100000 }}"
+        cpu_period: "{{ mrtg.web.cpu_limit | default(1) | int * 100000 }}"
         env:
           MRTG_DB_USER: "{{ mrtg.db.user }}"
           MRTG_DB_PASS: "{{ mrtg.db.password }}"
@@ -69,12 +73,13 @@
       until: result is success
       retries: 3
       delay: 5
+      notify: enable-systemd-service
 
-    - name: Hand over pod and container mgmt to systemd
-      vars:
-        container_name: "{{ web_container_name }}"
-        type: container
-      ansible.builtin.import_role:
-        name: podman_systemd_simple
+#    - name: Hand over pod and container mgmt to systemd
+#      vars:
+#        container_name: "{{ web_container_name }}"
+#        type: container
+#      ansible.builtin.import_role:
+#        name: podman_systemd_simple
   
   when: mrtg.web.enabled | default(true) | bool
