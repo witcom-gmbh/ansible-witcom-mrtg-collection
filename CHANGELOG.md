@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] - 2022-07-05
+
+### Fixed
+
+- (Re)start behaviour of mrtg-web-container
+
 ## [1.1.0] - 2022-07-01
 
 ### Added
