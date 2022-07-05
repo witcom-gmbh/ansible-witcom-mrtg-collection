@@ -1,2 +1,9 @@
 ---
 # handlers file for mrtg
+
+- name: enable-systemd-service
+  ansible.builtin.systemd:
+    name: "{{ _mrtg_web_service_unit }}"
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
